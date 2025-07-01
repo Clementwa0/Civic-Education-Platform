@@ -1,0 +1,19 @@
+{
+	"name": "civic-education",
+	"version": "1.0.0",
+	"description": " Civic Snap: Local Governance Made Fun and Engaging",
+	"main": "index.js",
+	"scripts": {
+		"dev": "concurrently \"npm run server\" \"npm run client\"",
+		"server": "cd server && npm start",
+		"client": "cd client && npm run dev",
+		"build": "cd client && npm run build && cd ../server && npm run build",
+		"install-all": "npm install && cd server && npm install && cd ../client && npm install"
+	},
+	"keywords": [],
+	"author": "",
+	"license": "ISC",
+	"devDependencies": {
+		"concurrently": "^9.2.0"
+	}
+}
