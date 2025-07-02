@@ -1,54 +1,193 @@
-✅ Unique Hackathon Idea (Picked for You)
-🧠 Civic Snap: Local Governance Made Fun
-What it is:
-An AI-powered civic education app where students “snap in” to their local county and get:
+**Civic Snap: Local Governance Made Fun**
 
-Localized governance updates (e.g., budget, projects)
+---
 
-Fun daily quizzes based on their age group
+## 1. Introduction
 
-AI-generated scenarios like: "You're the county governor for a week—how will you spend the budget?"
+### 1.1 Purpose
 
-Gamified leaderboard with weekly civic challenges
+This document defines the functional and non-functional requirements for **Civic Snap**, an AI-powered civic education app that delivers localized governance updates, quizzes, budget simulations, and gamified civic challenges to students.
 
-Why it's unique:
+### 1.2 Scope
 
-It brings real-world governance into the classroom in a personalized way
+* **Target Platform:** Web application (responsive) or Progressive Web App (PWA)
+* **Users:** Students (age 10+), educators, and administrators
+* **Key Features:**
 
-Combines AI + Civics + Local News
+  * Local data integration
+  * Age-specific quiz system
+  * Budget simulation interface
+  * Gamification (leaderboards, badges)
 
-Most civic apps are national-level or boring; this one is hyperlocal and fun
+### 1.3 Definitions
 
-Immediate Next Steps:
+* **MVP:** Minimum Viable Product, the initial deliverable for hackathon demonstration.
+* **County Data API:** Public or proprietary endpoint for retrieving county-level governance data.
 
-Start with the MVP Phase 1 - This gives you a working demo in 2-3 days
-Choose your tech stack - I'd recommend React + Node.js/Express for rapid development
-Set up your development environment with these priorities:
+---
 
-User authentication (simple email/password)
-Quiz system (most demo-friendly)
-Basic budget simulation (visual and engaging)
-Simple gamification (points and badges)
+## 2. Functional Requirements
 
+### 2.1 User Authentication & Profiles
 
+1. **Sign-Up / Sign-In**
 
-Strategic Development Order:
+   * Email/password registration
+   * Password reset via email
+2. **User Profile**
 
-Authentication & User Profiles (Day 1 morning)
-Quiz System (Day 1 afternoon - Day 2 morning)
-Budget Simulation (Day 2 afternoon - Day 3 morning)
-Basic Gamification (Day 3 afternoon)
-Polish & Demo Prep (Final hours)
+   * Store: name, age or age group, county (auto-detected or selected)
+   * Progress tracking: quiz history, points, badges
 
-Key Differentiators for Judges:
+### 2.2 Quiz System
 
-Real government data integration
-Age-appropriate personalization
-Practical civic skills (not just knowledge)
-Local relevance (using user location)
+1. **Question Bank**
 
-Would you like me to help you start building any specific component? I'd suggest beginning with either:
+   * Questions tagged by age group (e.g., 10–12, 13–15, 16–18)
+   * Multiple choice options (4 per question)
+   * Correct answer index and explanation text
+2. **Quiz Flow**
 
-The project setup and basic authentication system
-The quiz system (great for demonstrating the concept quickly)
-The budget simulation interface (very visual and engaging)
+   * Daily/weekly quiz prompt on login/dashboard
+   * Randomize 5–10 questions per session
+   * Instant feedback: show correct answer + civic explanation
+   * Award points per correct answer
+3. **History & Analytics**
+
+   * Store quiz sessions per user
+   * Display performance over time
+
+### 2.3 Local Governance Data
+
+1. **Budget & Projects**
+
+   * Fetch budget allocation data (e.g., health, education, infrastructure)
+   * Display simple charts (bar, pie) for budget breakdown
+   * List ongoing/upcoming county projects with status
+2. **AI-Generated Scenarios**
+
+   * Prompt: “You’re county governor—allocate KES 10M across sectors”
+   * AI service integration (e.g., OpenAI) to generate scenario descriptions
+   * User allocates via sliders; system displays impact summary
+
+### 2.4 Gamification
+
+1. **Points & Badges**
+
+   * Points for quizzes, scenarios, daily challenges
+   * Badge criteria (e.g., “Quiz Master” for 50 correct answers)
+2. **Leaderboards**
+
+   * Weekly leaderboard per county and age group
+   * Display top 10 users with points
+3. **Civic Challenges**
+
+   * Weekly challenge descriptions (e.g., attend local meeting, research budget)
+   * Users mark completion; earn bonus points
+
+### 2.5 Administration Panel
+
+1. **User & Content Management**
+
+   * CRUD for quiz questions and badges
+   * Review and approve AI scenario templates
+2. **Analytics Dashboard**
+
+   * Aggregate quiz performance
+   * Leaderboard statistics
+   * API usage metrics
+
+---
+
+## 3. Non-Functional Requirements
+
+| Category        | Requirement                                     |
+| --------------- | ----------------------------------------------- |
+| Performance     | API responses < 300ms; Page load < 1s on 4G     |
+| Scalability     | Support 10k concurrent users                    |
+| Security        | OWASP Top 10 compliance; HTTPS only; JWT auth   |
+| Usability       | WCAG AA accessibility; mobile-responsive design |
+| Maintainability | Modular code; documented; automated tests       |
+| Reliability     | 99.5% uptime; error monitoring & alerts         |
+| Localization    | English + Swahili support                       |
+
+---
+
+## 4. Technical Stack
+
+* **Frontend:** React, TailwindCSS, Shadcn/UI, React Router
+* **Backend:** Node.js, Express.js, MongoDB (or Supabase/Postgres)
+* **AI Integration:** OpenAI API (GPT-4)
+* **Auth & Hosting:** Firebase Auth (optional), Vercel/Netlify
+* **Data Visualization:** Recharts or Chart.js
+
+---
+
+## 5. Data Models & APIs
+
+### 5.1 User Model
+
+```json
+{
+  "id": "string",
+  "name": "string",
+  "email": "string",
+  "passwordHash": "string",
+  "ageGroup": "string",
+  "county": "string",
+  "points": "number",
+  "badges": ["string"],
+  "quizHistory": [
+    {"date": "ISODate", "score": "number"}
+  ]
+}
+```
+
+### 5.2 Quiz Question Model
+
+```json
+{
+  "id": "string",
+  "question": "string",
+  "choices": ["string"],
+  "correctIndex": "number",
+  "explanation": "string",
+  "ageGroup": "string"
+}
+```
+
+### 5.3 Key API Endpoints
+
+| Method | Endpoint            | Description                       |
+| ------ | ------------------- | --------------------------------- |
+| POST   | /api/auth/register  | Register user                     |
+| POST   | /api/auth/login     | Authenticate user                 |
+| GET    | /api/quiz?ageGroup= | Fetch randomized questions        |
+| POST   | /api/quiz/submit    | Submit answers, calculate points  |
+| GET    | /api/budget?county= | Retrieve budget data for county   |
+| POST   | /api/scenario       | Submit budget allocations, get AI |
+| GET    | /api/leaderboard    | Weekly leaderboard                |
+
+---
+
+## 6. User Stories
+
+1. **As a student**, I want to take a quick daily quiz so I can learn about my county’s governance.
+2. **As a student**, I want to simulate budget allocations so I can understand trade-offs.
+3. **As a student**, I want to earn badges and see a leaderboard so I stay motivated.
+4. **As an educator**, I want to review quiz results so I can track my students’ progress.
+5. **As an admin**, I want to manage quiz content so I can ensure quality and relevance.
+
+---
+
+## 7. Roadmap & Milestones (2–3 Day Hackathon)
+
+| Day   | Morning                                 | Afternoon                       |
+| ----- | --------------------------------------- | ------------------------------- |
+| Day 1 | Project setup, Auth, User Profiles      | Quiz system MVP                 |
+| Day 2 | Budget data integration & visualization | AI scenario integration         |
+| Day 3 | Gamification & Leaderboard              | Demo polish & presentation prep |
+
+---
+
+**End of Document**
